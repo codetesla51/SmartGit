@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Define color variables
+BLACK='\033[0;30m'
+BRIGHT_RED='\033[1;31m'
+BRIGHT_GREEN='\033[1;32m'
+BRIGHT_YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[0;37m'
+NC='\033[0m' # No Color
+
+# Functions for each color
+black() {
+  echo -e "${BLACK}$*${NC}"
+}
+
+red() {
+  echo -e "${BRIGHT_RED}$*${NC}"
+}
+
+green() {
+  echo -e "${BRIGHT_GREEN}$*${NC}"
+}
+
+yellow() {
+  echo -e "${BRIGHT_YELLOW}$*${NC}"
+}
+
+blue() {
+  echo -e "${BLUE}$*${NC}"
+}
+
+magenta() {
+  echo -e "${MAGENTA}$*${NC}"
+}
+
+cyan() {
+  echo -e "${CYAN}$*${NC}"
+}
+
+white() {
+  echo -e "${WHITE}$*${NC}"
+}
+space(){
+  echo -e  "\n"
+}

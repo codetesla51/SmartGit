@@ -1,0 +1,17 @@
+#!/bin/bash
+
+initialize_repo(){
+  if [ -d ".git" ]; then
+    red "git already initialized"
+  else
+    git init > /dev/null 2>&1 # suppress git output
+    git add "$DEFAULT_FILE"
+    git commit -m "$DEFAULT_COMMIT_MEASSAGE"
+    green "git initialized with commit $DEFAULT_COMMIT_MEASSAGE"
+    configure_git_credentials
+  fi
+}
+configure_git_credentials() {
+    git config --global credential.helper store  # Configure credential helper
+   green echo "git credential helper configured to store credentials securely.${NC}\n"
+}

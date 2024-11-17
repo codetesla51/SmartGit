@@ -1,0 +1,70 @@
+#!/bin/bash
+source "../docs/help"
+is_command() {
+  case $1 in
+    status | s | count | init | i | add | a | commit | --commit | --add | --fix | --modify)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+while [[ "$1" != "" ]]; do
+  case $1 in
+    init | i)
+      INITIALIZE_GIT=true
+      ;;
+      
+    add | a)
+      STAGE_FILE=true
+      shift
+      if [[ -n "$1" && ! $(is_command "$1") ]]; then
+        FILE="$1"
+        shift
+        
+        if [[ "$1" =~ ^--(commit|add|fix|modify|update|refactor|remove|optimize|hotfix|feature|cleanup|security)$ ]]; then
+          set_commit_message "$1"
+          shift
+          if [[ -n "$1" && ! $(is_command "$1") ]]; then
+            COMMIT_MESSAGE="$1"
+            shift
+          fi
+        fi
+      else
+        red "Error: Missing or invalid file argument after 'add'."
+        exit 1
+      fi
+      ;;
+      
+    commit)
+      shift
+      if [[ "$1" != "" ]]; then
+        COMMIT_MESSAGE="$1"
+        shift
+      fi
+      ;;
+      
+    status | s)
+      status
+      ;;
+      
+    count)
+      count_commits
+      ;;
+   h | help)
+   show_help
+   exit 0
+      ;;
+    *)
+    red "invalid commad or tag"
+    space
+      show_usage
+      exit 1
+      ;;
+      
+  esac
+  shift
+done
+

@@ -1,0 +1,17 @@
+source "../lib/color"
+status(){
+    if git diff-index --quiet HEAD --; then
+      blue "no uncommitted changes"
+      else
+     yellow  "There are uncommitted changes:\n"  # Uncommitted changes found
+        git status --short  # Display files with their status
+        blue "add and commit chages"
+    fi
+    total_commits=$(git rev-list --count HEAD) 
+    space
+    blue "Total commits in the current branch: $total_commits\n"
+}
+count_commits(){
+total_commits=$(git rev-list --count HEAD) 
+  blue "Total commits in the current branch: $total_commits\n"
+}

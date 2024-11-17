@@ -1,0 +1,50 @@
+#!/bin/bash
+set_commit_message() {
+  case $1 in
+    --add)
+      COMMIT_MESSAGE="Added new files to the repository."
+      ;;
+    --fix)
+      COMMIT_MESSAGE="Fixed bugs and resolved issues."
+      ;;
+    --modify)
+      COMMIT_MESSAGE="Modified existing files for improvement."
+      ;;
+    --update)
+      COMMIT_MESSAGE="Updated dependencies and configurations."
+      ;;
+    --refactor)
+      COMMIT_MESSAGE="Refactored code for better performance and readability."
+      ;;
+    --remove)
+      COMMIT_MESSAGE="Removed unnecessary or deprecated files."
+      ;;
+    --optimize)
+      COMMIT_MESSAGE="Optimized code for better efficiency."
+      ;;
+    --hotfix)
+      COMMIT_MESSAGE="Applied a critical hotfix."
+      ;;
+    --feature)
+      COMMIT_MESSAGE="Added a new feature."
+      ;;
+    --cleanup)
+      COMMIT_MESSAGE="Performed code cleanup and formatting."
+      ;;
+    --security)
+      COMMIT_MESSAGE="Fixed security vulnerabilities."
+      ;;
+    *)
+      COMMIT_MESSAGE="$1" 
+      ;;
+  esac
+}
+
+commit_changes(){
+  if [[ -z "$COMMIT_MESSAGE" ]]; then
+    yellow "Please provide a commit message."
+  else
+    git commit -m "$COMMIT_MESSAGE" > /dev/null 2>&1
+    green "Committed with message: $COMMIT_MESSAGE"
+  fi
+}

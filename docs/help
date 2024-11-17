@@ -1,0 +1,103 @@
+#!/bin/bash
+
+# ===========================================================
+# Script Name: SmartGit
+# Author: Uthman Dev
+# Description: This script automates common Git tasks.
+# Flags:
+# -i          Initialize a new Git repository in the current directory.
+# -c <msg>    Commit changes with a specified message.
+# -I          Generate a .gitignore file based on project type.
+# -a <files>  Add specified files to the staging area.
+# -s          Display the current Git status.
+# -r          Discard all uncommitted changes in the working directory.
+# -R          Generate README and LICENSE files.
+# -t          Count all commits in the current branch.
+# -h, --help  Display this help guide.
+# ===========================================================
+
+# Function to display usage information
+show_usage() {
+    echo -e "${BRIGHT_GREEN}Usage: ./smartgit.sh [options]${NC}"
+    echo -e "${BLUE}Options:${NC}"
+    echo -e "${BRIGHT_GREEN}-i${NC}: Initialize a new Git repository in the current directory."
+    echo -e "${BRIGHT_GREEN}-c <message>${NC}: Commit changes with a specified message."
+    echo -e "${BRIGHT_GREEN}-I${NC}: Generate a .gitignore file based on project type."
+    echo -e "${BRIGHT_GREEN}-a <files>${NC}: Add specified files to the staging area."
+    echo -e "${BRIGHT_GREEN}-s${NC}: Display the current Git status."
+    echo -e "${BRIGHT_GREEN}-r${NC}: Discard all uncommitted changes in the working directory."
+    echo -e "${BRIGHT_GREEN}-R${NC}: Generate README and LICENSE files."
+    echo -e "${BRIGHT_GREEN}-t${NC}: Count all commits in the current branch."
+    echo -e "${BRIGHT_GREEN}-h, --help${NC}: Display this help guide."
+    exit 1
+}
+
+show_help() {
+    clear
+    echo -e "${BRIGHT_GREEN}
+┏━━━┓       ┏━━━┓ 
+┃ ┃ ┃SmartGit ┃┃ 
+┗━┓┏┳━━┓ ┏┳━━┓┃┏━┓
+   ┃┃┃┏┓┃ ┃┃┏┓┃┃┃┃
+   ┃┃┃┗┛┃ ┗┻┗┛┃┃┗┛
+   ┗┛┗━┛      ┗┛
+Automating Git tasks with ease!
+${NC}"
+    sleep 2
+    printf "\n"
+
+    echo -e "${BLUE}SmartGit Help: SmartGit is a Git automation tool designed to streamline Git tasks such as initializing repositories, committing changes, and adding files.
+
+Learn More:
+- ${BRIGHT_GREEN}sgit -doc${NC}: Open the documentation site for detailed guidance.
+- ${BRIGHT_GREEN}sgit -repo${NC}: Visit the GitHub repository for more information and updates.${NC}"
+
+    echo "--------------------------------------------------"
+    printf "\n"
+
+    echo -e "${BLUE}Command Overview:${NC}"
+    printf "\n"
+
+    echo -e "${BRIGHT_YELLOW}Description:${NC} A streamlined utility for common Git commands and project setup."
+
+    echo -e "${BRIGHT_GREEN}-i:${NC}          Initialize a new Git repository in the current directory."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-c${NC}  Commit changes with a specified message."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-I:${NC}          Generate a .gitignore file based on project type."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-a <files>:${NC} Add specified files to the staging area."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-s:${NC}          Display the current Git status."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-r:${NC}          Discard all uncommitted changes in the working directory."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-R:${NC}          Generate README and LICENSE files."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-t:${NC}          Count all commits in the current branch."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-B:${NC}          Create Branch And Checkout (if exists, only checkout)."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-P:${NC}          Push Commands include setting remote repo URL, pushing branch, and more."
+    printf "\n"
+    
+    echo -e "${BRIGHT_GREEN}-repo:${NC}       Open the project's GitHub repository for more information."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-doc:${NC}        Access the online documentation site."
+    printf "\n"
+
+    echo -e "${BRIGHT_GREEN}-h, --help:${NC}  Display this help guide."
+    printf "\n"
+
+    echo "--------------------------------------------------"
+}
