@@ -2,9 +2,11 @@
 add_file() {
   if [[ "$FILE" == "." ]]; then
     green "Staging all files..."
+    space
     git add . > /dev/null 2>&1
   elif [[ -f "$FILE" ]]; then
     green "Staging  $FILE"
+    space
     git add "$FILE" > /dev/null 2>&1
   else
     red "File does not exist: $FILE"
