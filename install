@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Function to check if the system is Termux or Linux
+isTermux() {
+  if [[ -f /data/data/com.termux/files/usr/bin/bash ]]; then
+    return 0  # Termux
+  else
+    return 1  # Not Termux
+  fi
+}
+
+# Function to print in white text (or customize for other colors)
+white() {
+  echo -e "${WHITE}$*${NC}"
+}
+
+# Function to install smart git
+smartGitInstall() {
+  if [[ ! -d "$HOME/smart-git" ]]; then
+    white "Error: smart-git folder not found in the home directory"
+    return 1
+  fi
+
+  # Ensure the sgit script is executable
+  if [[ ! -x "$HOME/smart-git/bin/sgit" ]]; then
+    chmod +x "$HOME/smart-git/bin/sgit"
+    if [[ $? -ne 0 ]]; then
+      white "Error: Failed to make sgit executable"
+      return 1
+    fi
+  fi
+
+  # Check if we're on Termux or Linux
+  if isTermux; then
+    # On Termux, create symlink in $HOME/bin (no sudo)
+    if [[ ! -L "$HOME/bin/sgit" ]]; then
+      ln -s "$HOME/smart-git/bin/sgit" "$HOME/bin/sgit"
+      white "Symlink for sgit created in $HOME/bin"
+    else
+      white "Symlink for sgit already exists in $HOME/bin"
+    fi
+  else
+    # On Linux, use /usr/local/bin and sudo for symlink creation
+    if [[ ! -L "/usr/local/bin/sgit" ]]; then
+      sudo ln -s "$HOME/smart-git/bin/sgit" /usr/local/bin/sgit
+      white "Symlink for sgit created in /usr/local/bin"
+    else
+      white "Symlink for sgit already exists in /usr/local/bin"
+    fi
+  fi
+
+  # Check if the alias already exists in .bashrc
+  if ! grep -q 'alias sgit=' ~/.bashrc; then
+    # Add alias to .bashrc
+    echo 'alias sgit="$HOME/smart-git/bin/sgit"' >> ~/.bashrc
+    white "Alias for sgit added to .bashrc"
+  else
+    white "Alias for sgit already exists in .bashrc"
+  fi
+
+  # Reload the .bashrc file to apply changes
+  source ~/.bashrc
+  if [[ $? -eq 0 ]]; then
+    white "smart-git installed successfully and alias applied"
+  else
+    white "Error: Failed to source ~/.bashrc"
+  fi
+}
+
+# Run the installation
+smartGitInstall
