@@ -1,5 +1,5 @@
 #!/bin/bash
-source "../docs/help"
+source "$BASE_DIR/docs/help"
 is_command() {
   case $1 in
     status | s | count | init | i | add | a | commit | --commit | --add | --fix | --modify)

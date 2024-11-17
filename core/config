@@ -1,5 +1,6 @@
 #!/bin/bash
 #core variable 
+BASE_DIR="$HOME/smart-git"
 COMMIT_MEASSAGE="initial commit"
 BRANCH="main"
 INITILIZE_GIT=false
