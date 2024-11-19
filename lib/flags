@@ -57,6 +57,46 @@ while [[ "$1" != "" ]]; do
    show_help
    exit 0
       ;;
+    branch | b)
+    shift
+  case "$1" in
+  --create | create)
+    create_branch
+    ;;
+  --list | list)
+    list_branches
+    ;;
+  --info | info)
+    show_branch_info
+    ;;
+  --check | check | switch)
+    switch_branch
+    ;;
+  --del | del | delete | --delete)
+    delete_branch
+    ;;
+  --fdel | fdel | force-delete)
+    force_delete_branch
+    ;;
+  --merge | merge)
+    merge_branch
+    ;;
+  --rname | rename)
+    rename_branch
+    ;;
+  --clean | cleanup)
+    cleanup_branches
+    ;;
+  --help | help)
+    show_help
+    ;;
+  *)
+    echo -e "${BRIGHT_RED}Invalid option. Use 'help' or '--help' to see the available commands.${NC}"
+    ;;
+esac
+
+    shift
+    ;;
     *)
     red "invalid commad or tag"
     space

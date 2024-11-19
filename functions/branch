@@ -1,0 +1,133 @@
+#!/bin/bash
+
+
+# Function Definitions
+create_branch() {
+  read -p "Enter Branch Name: " branch
+  git checkout -b "$branch" >/dev/null 2>&1
+  if [[ $? -eq 0 ]]; then
+    echo -e "${BRIGHT_GREEN}Created and switched to new branch: $branch${NC}"
+  else
+    echo -e "${BRIGHT_RED}Failed to create branch '$branch'.${NC}"
+  fi
+}
+
+list_branches(){
+  echo "Available Branches:"
+  git fetch --all --prune 2>/dev/null
+  git branch -a --no-color | while read branch; do
+    branch="${branch##*( )}"
+    if [[ $branch == "*"* ]]; then
+      echo -e "${BRIGHT_GREEN}→ ${branch:2} (current)${NC}"
+    elif [[ $branch == "remotes/"* ]]; then
+      remote_branch=${branch#remotes/}
+      echo -e "${MAGENTA}  ⟫ $remote_branch (remote)${NC}"
+    else
+      echo -e "${CYAN}  • ${branch}${NC}"
+    fi
+  done || echo -e "${BRIGHT_RED}Failed to list branches or no branches exist.${NC}"
+}
+
+show_branch_info() {
+  current_branch=$(git branch --show-current)
+  if [ -z "$current_branch" ]; then
+    echo -e "${BRIGHT_RED}No current branch found!${NC}"
+  else
+    last_commit=$(git log -1 --pretty=format:"%h - %s" "$current_branch")
+    echo -e "${BRIGHT_GREEN}Current Branch:${NC} $current_branch"
+    echo -e "${BRIGHT_GREEN}Last Commit:${NC} $last_commit"
+  fi
+}
+
+switch_branch(){
+  read -p "Enter Branch Name to switch to: " branch_name
+  if git show-ref --quiet refs/heads/"$branch_name"; then
+    git checkout "$branch_name" >/dev/null 2>&1 && echo -e "${BRIGHT_GREEN}Switched to branch: $branch_name${NC}"
+  else
+    echo -e "${BRIGHT_RED}Branch '$branch_name' does not exist!${NC}"
+  fi
+}
+
+delete_branch(){
+  current_branch=$(git branch --show-current)
+  read -p "Enter Branch Name to delete: " branch_name
+  if [[ "$branch_name" == "$current_branch" ]]; then
+    echo -e "${BRIGHT_RED}Error: You are currently on branch '$current_branch'. Switch to another branch before deleting.${NC}"
+  elif git show-ref --quiet refs/heads/"$branch_name"; then
+    git branch -d "$branch_name" >/dev/null 2>&1 && echo -e "${BRIGHT_GREEN}Deleted branch: $branch_name${NC}"
+  else
+    echo -e "${BRIGHT_RED}Branch '$branch_name' does not exist!${NC}"
+  fi
+}
+
+force_delete_branch(){
+  current_branch=$(git branch --show-current)
+  read -p "Enter Branch Name to force delete: " branch_name
+  if [[ "$branch_name" == "$current_branch" ]]; then
+    echo -e "${BRIGHT_RED}Error: You are currently on branch '$current_branch'. Switch to another branch before force deleting.${NC}"
+  elif git show-ref --quiet refs/heads/"$branch_name"; then
+    git branch -D "$branch_name" >/dev/null 2>&1 && echo -e "${BRIGHT_RED}Force deleted branch: $branch_name${NC}"
+  else
+    echo -e "${BRIGHT_RED}Branch '$branch_name' does not exist!${NC}"
+  fi
+}
+
+merge_branch(){
+  read -p "Enter branch name to merge into current branch: " branch_name
+  if git show-ref --quiet refs/heads/"$branch_name"; then
+    git merge "$branch_name" >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      echo -e "${BRIGHT_GREEN}Merged branch: $branch_name into $(git branch --show-current)${NC}"
+    else
+      echo -e "${BRIGHT_RED}Merge conflicts detected! Please resolve them.${NC}"
+    fi
+  else
+    echo -e "${BRIGHT_RED}Branch '$branch_name' does not exist!${NC}"
+  fi
+}
+
+rename_branch(){
+  read -p "Enter current branch name: " current_branch_name
+  read -p "Enter new branch name: " new_branch
+  if git show-ref --quiet refs/heads/"$current_branch_name"; then
+    git branch -m "$current_branch_name" "$new_branch" >/dev/null 2>&1 && echo -e "${BRIGHT_GREEN}Renamed branch '$current_branch_name' to '$new_branch'${NC}"
+  else
+    echo -e "${BRIGHT_RED}Branch '$current_branch_name' does not exist!${NC}"
+  fi
+}
+
+cleanup_branches(){
+  merged_branches=$(git branch --merged | grep -v 'main\|master\|develop') # Exclude main branches
+  if [ -z "$merged_branches" ]; then
+    echo -e "${BRIGHT_RED}No merged branches to clean up.${NC}"
+    return
+  fi
+
+  echo -e "${BLUE}Merged branches:${NC}"
+  echo "$merged_branches"
+
+  read -p "Do you want to delete these merged branches? (y/n): " confirm
+  if [[ "$confirm" == "y" ]]; then
+    echo "$merged_branches" | xargs git branch -d
+    echo -e "${BRIGHT_GREEN}Cleaned up merged branches.${NC}"
+  else
+    echo -e "${BRIGHT_YELLOW}Cleanup canceled.${NC}"
+  fi
+}
+
+show_help() {
+  echo -e "${BLUE}SmartGit Branch Manager Usage:${NC}"
+  echo -e "\nCommands:"
+  echo -e "  ${BRIGHT_GREEN}create${NC}             Create a new branch"
+  echo -e "  ${BRIGHT_GREEN}list${NC}               List all branches"
+  echo -e "  ${BRIGHT_GREEN}switch${NC}             Switch to an existing branch"
+  echo -e "  ${BRIGHT_GREEN}delete${NC}             Delete a branch"
+  echo -e "  ${BRIGHT_GREEN}force-delete${NC}       Force delete a branch"
+  echo -e "  ${BRIGHT_GREEN}merge${NC}              Merge a branch into the current branch"
+  echo -e "  ${BRIGHT_GREEN}rename${NC}             Rename a branch"
+  echo -e "  ${BRIGHT_GREEN}info${NC}               Show info about the current branch"
+  echo -e "  ${BRIGHT_GREEN}cleanup${NC}            Cleanup merged branches"
+  echo -e "  ${BRIGHT_GREEN}help${NC}               Show this help message"
+}
+
+
