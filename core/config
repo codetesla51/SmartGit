@@ -7,3 +7,4 @@ INITILIZE_GIT=false
 FILE="."
 COMMIT_AFTER_ADD=false
 STAGE_FILE=false
+

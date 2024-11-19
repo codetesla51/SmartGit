@@ -1,6 +1,4 @@
 #!/bin/bash
-
-
 # Function Definitions
 create_branch() {
   read -p "Enter Branch Name: " branch

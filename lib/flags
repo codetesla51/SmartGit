@@ -97,6 +97,8 @@ esac
 
     shift
     ;;
+    gen)
+    ;;
     *)
     red "invalid commad or tag"
     space
