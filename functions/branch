@@ -115,7 +115,7 @@ cleanup_branches(){
   fi
 }
 
-show_help() {
+branch_help() {
   echo -e "${BLUE}SmartGit Branch Manager Usage:${NC}"
   echo -e "\nCommands:"
   echo -e "  ${BRIGHT_GREEN}create${NC}             Create a new branch"
