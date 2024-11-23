@@ -97,7 +97,21 @@ esac
 
     shift
     ;;
-    gen)
+    push | p)
+     case "$i" in
+       show | --show)
+       view_remote
+         ;;
+    set | --set)
+    set_remote
+    ;;
+    branch | --branch)
+    push_branch
+    ;;
+    *)
+    ;;
+     esac
+    shift
     ;;
     *)
     red "invalid commad or tag"
