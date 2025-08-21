@@ -3,7 +3,7 @@
 BASE_DIR="$HOME/smart-git"
 COMMIT_MEASSAGE="initial commit"
 BRANCH="main"
-INITILIZE_GIT=false
+INITILIZE_GIT=true 
 FILE="."
 COMMIT_AFTER_ADD=false
 STAGE_FILE=false
